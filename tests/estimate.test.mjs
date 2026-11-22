@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { calculateEstimate, projectAnnualRevenue } from '../src/core/estimate.mjs';
-import { INDUSTRY_TEMPLATES } from '../src/catalog/industry-templates.mjs';
+import { INDUSTRY_TEMPLATES, createIndustryProfile } from '../src/catalog/industry-templates.mjs';
 
 test('estimates work for any industry, not just landscaping', () => {
   const result = calculateEstimate([
@@ -48,4 +48,33 @@ test('supports extra service categories without changing the core', () => {
   assert.ok(INDUSTRY_TEMPLATES.landscaping.includes('Weed removal'));
   assert.ok(INDUSTRY_TEMPLATES.hvac.includes('Diagnostic visit'));
   assert.ok(INDUSTRY_TEMPLATES.cleaning.includes('Commercial janitorial visit'));
+});
+
+test('accepts any custom industry, even when no template exists', () => {
+  assert.deepEqual(createIndustryProfile({
+    industry: ' Mobile pet grooming ',
+    services: [' Coat trimming ', 'Nail care'],
+  }), {
+    industry: 'Mobile pet grooming',
+    starterTemplate: null,
+    services: ['Coat trimming', 'Nail care'],
+  });
+});
+test('does not require a service list when choosing an unknown industry', () => {
+  assert.deepEqual(createIndustryProfile({ industry: 'Drone inspection' }), {
+    industry: 'Drone inspection',
+    starterTemplate: null,
+    services: [],
+  });
+});
+test('known starters remain optional and case insensitive', () => {
+  const starter = createIndustryProfile({ industry: 'HVAC' });
+  assert.equal(starter.starterTemplate, 'hvac');
+  assert.ok(starter.services.includes('Diagnostic visit'));
+  const custom = createIndustryProfile({ industry: 'HVAC', services: ['Custom safety check'] });
+  assert.deepEqual(custom.services, ['Custom safety check']);
+});
+test('rejects unnamed industry and invalid custom service names', () => {
+  assert.throws(() => createIndustryProfile({ industry: ' ' }), /industry/);
+  assert.throws(() => createIndustryProfile({ industry: 'Anything', services: [''] }), /nonempty/);
 });
