@@ -4,7 +4,7 @@
 
 ## Who it's for
 
-Landscaping and lawn care, HVAC, plumbing, electrical, cleaning and janitorial services, construction, painting, handyman services, property maintenance, and other field-service businesses.
+**Any industry selected or entered by the business owner.** Landscaping, HVAC, plumbing, electrical, cleaning, construction, painting, and property maintenance are optional starter examples only. A user can enter an entirely new industry and define its own services without developer approval or changing the app.
 
 ## Core features (planned)
 
@@ -19,7 +19,7 @@ Landscaping and lawn care, HVAC, plumbing, electrical, cleaning and janitorial s
 
 ## Product principles
 
-1. **Multi-industry first.** Do not hard-code landscaping terminology into shared workflows or data models.
+1. **User-defined industries, no whitelist.** Let each business select a starter industry or enter any new industry name, define services in its own words, and change them later. Never force a fixed set of trades or hard-code landscaping terminology into shared workflows.
 2. **Flexible pricing.** Each business defines its own services, rates, schedules, travel fees, and add-ons.
 3. **Preserve the existing CrewStack interface.** Keep the established dark evergreen design and orange action treatment unless intentionally revised.
 4. **Lean and useful.** Focus on a working MVP for small crews before expanding features.
