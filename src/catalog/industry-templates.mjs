@@ -12,3 +12,34 @@ export const INDUSTRY_TEMPLATES = Object.freeze({
 });
 
 export const units = Object.freeze(['each', 'hour', 'visit', 'day', 'sq ft', 'linear ft', 'project']);
+
+/**
+ * Any user-supplied industry name is valid. Starter categories are suggestions,
+ * never a whitelist. Custom services can describe any kind of job.
+ */
+export function createIndustryProfile({ industry, services = [] } = {}) {
+  if (typeof industry !== 'string' || !industry.trim()) {
+    throw new TypeError('industry is required');
+  }
+  if (!Array.isArray(services)) {
+    throw new TypeError('services must be an array');
+  }
+  const cleanIndustry = industry.trim();
+  const cleanServices = services.map(service => {
+    if (typeof service !== 'string' || !service.trim()) {
+      throw new TypeError('each service must be a nonempty name');
+    }
+    return service.trim();
+  });
+  const starterKey = Object.keys(INDUSTRY_TEMPLATES)
+    .find(key => key.toLowerCase() === cleanIndustry.toLowerCase()) ?? null;
+  return {
+    industry: cleanIndustry,
+    starterTemplate: starterKey,
+    services: cleanServices.length
+      ? cleanServices
+      : starterKey
+        ? [...INDUSTRY_TEMPLATES[starterKey]]
+        : [],
+  };
+}
